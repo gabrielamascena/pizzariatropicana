@@ -1,0 +1,35 @@
+const {Pool} = require ("pg");
+async function criarConexao () {
+    const pool = new Pool({
+        connectionString:'postgres: // gjcnwwanbsdcie : a06c96355867802a7c7dacc3630988d97f9c514b459aaf205d88f6b8859204ed @ ec2-34-239-33-57.compute-1.amazonaws.com : 5432 / ddn273jh6di4hb4h',
+        ssl: {
+            rejectUnauthorized: false
+        }
+    });
+
+    let con = await pool.connect();
+    let res = await con.query("create table pessoa (id_pessoa serial primary key, nome varchar, telefone integer, endereco varchar)");
+
+
+    let nome = "pessoa";
+    let endereco = "endereco";
+    let telefone = "telefone";
+
+    let res = await con.query("insert into pessoa (nome, endereco, telefone) values ($1, $2, $3)", ["pessoa1", "endereco2", "telefone3"]);
+
+   let res = await con.query("insert into pessoa (nome, endereco, telefone) values ($1, $2, $3)", ["Beatriz", "RuadaGaby", "40028922"]); 
+
+   await con.query("uptade pessoa set nome = $1 where id_pessoa = $2", ["pessoa1", 1]); 
+
+    await con.query("delete from pessoa where nome like 'pessoa%'");
+    await con.query("delete from pessoa where endereco like 'endereco%'");
+    await con.query("delete from pessoa where telefone like 'telefone%'");
+    
+    let res = await con.query("select * from pessoa"); 
+    let tuplas = res.rows;
+    for(let tupla of tuplas) {
+        console.log("tupla");
+    }
+    con.release();
+}
+criarConexao();
